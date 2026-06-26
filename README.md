@@ -98,7 +98,7 @@ Currently, this tool is designed for **Windows 10 and 11**. It specifically supp
 Currently, this tool supports only 'es-ES' (Spanish - Spain) MUI files, meaning that MUI files in other localizations will not be modified during program execution.
 
 ### Is it safe to use?
-Yes, it is highly safe. The program operates using strict CRC-32 checksum validation; if an MUI file does not match the known signatures in the source code, it is completely ignored and remains untouched. Furthermore, the original system files are never directly modified during the program's execution. All replacements are scheduled via the Windows Session Manager to occur during the next system reboot, acting as a safe buffer.
+Yes, it is highly safe. The program operates using file checksum validations; if an MUI file does not match the known signatures hardcoded in the source code, it is completely ignored and remains untouched. Furthermore, the original system files are never directly modified during the program's execution. All replacements are scheduled via the Windows Session Manager to occur during the next system reboot, acting as a safe buffer.
 
 ### What should I do if I want to cancel the pending MUI file replacements or if something goes wrong?
 If you need to cancel a pending MUI file replacement operation or if an issue occurs, you can manually clear the scheduled tasks:
@@ -110,6 +110,13 @@ If you need to cancel a pending MUI file replacement operation or if an issue oc
    Deleting this value safely discards the pending MUI file replacement operations, ensuring no modifications are applied to your system on the next reboot.
 
 ![screenshot](/Images/faq1.png)
+
+### Can I just delete the temporary pending MUI files to cancel the pending operations on next system restart?
+Partially yes, but you should absolutely **not do it**. Once a MUI file is successfully processed, the application have scheduled a file swap operation for the next system restart. This swap operation involves backing up your original system MUI files and replacing them with the modified versions.
+
+If you delete the temporary pending MUI files while the registry entry is still active, the operating system will still attempt to perform the file swap on reboot. It will rename your original MUI file to a backup like "notepad.mui.bak", but since the modified MUI replacement file is missing, the system will end up with no valid MUI file at all. This will render your system resources inaccessible and cause critical stability or UI display issues.
+
+The only safe and recommended way to abort a pending operation is by clearing the registry entry in **`PendingFileRenameOperations`**, as described in the section above.
 
 ### I am a developer and want to add support for other languages. Where should I start?
 Adding support for another system language is simple. You just need to follow the existing structure:
