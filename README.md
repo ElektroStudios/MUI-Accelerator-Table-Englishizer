@@ -64,7 +64,8 @@ In localized Windows environments, keyboard shortcuts in core applications like 
 
 ## 📝 Requirements
 
-- Microsoft Windows 10 or Windows 11, specifically using Spanish (Spain) as the system language.
+- Operating System: Microsoft Windows 10 or Windows 11 (x86/x64).
+- User Permissions: Administrative privileges are required to run this program.
 
 ## 🤖 Getting Started
 
