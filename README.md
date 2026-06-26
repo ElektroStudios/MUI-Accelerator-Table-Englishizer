@@ -33,7 +33,7 @@ patch-tools
 shell32dll 
  -->
 
-# MATE (MUI Accelerator Table Englishizer)
+# MATE (MUI Accelerator Table 'Englishizer')
 
 ### Enables the use of English keyboard shortcuts in Explorer, Notepad, and Wordpad on Windows 10 and 11 for users running the operating system in another language.
 
