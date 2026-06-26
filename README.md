@@ -116,7 +116,7 @@ Partially yes, but you should absolutely **not do it**.
 
 Once a MUI file is successfully processed by the application, it schedules a file swap operation for the next system restart. This swap operation involves backing up your original system MUI files and replacing them with the modified versions located in the temporary directory.
 
-If you delete the temporary pending MUI files while the registry entry is still active, the operating system will still attempt to perform the file swap on reboot. It will rename your original MUI file to a backup like "notepad.mui.bak", but since the modified MUI replacement file is missing, the system will end up with no valid MUI file at all. This will render your system resources inaccessible and cause critical stability or UI display issues.
+If you delete the temporary pending MUI files while the registry entry is still active, the operating system will still attempt to perform the file swap on reboot. It will rename your original MUI file to a backup like "notepad.exe.mui.bak", but since the modified MUI replacement file is missing, the system will end up with no valid MUI file at all. This will render your system resources inaccessible and cause critical stability or UI display issues.
 
 The only safe and recommended way to abort a pending operation is by clearing the registry entries in **`PendingFileRenameOperations`**, as described in the section above.
 
