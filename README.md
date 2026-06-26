@@ -112,11 +112,13 @@ If you need to cancel a pending MUI file replacement operation or if an issue oc
 ![screenshot](/Images/faq1.png)
 
 ### Can I just delete the temporary pending MUI files to cancel the pending operations on next system restart?
-Partially yes, but you should absolutely **not do it**. Once a MUI file is successfully processed, the application have scheduled a file swap operation for the next system restart. This swap operation involves backing up your original system MUI files and replacing them with the modified versions.
+Partially yes, but you should absolutely **not do it**. 
+
+Once a MUI file is successfully processed by the application, it schedules a file swap operation for the next system restart. This swap operation involves backing up your original system MUI files and replacing them with the modified versions located in the temporary directory.
 
 If you delete the temporary pending MUI files while the registry entry is still active, the operating system will still attempt to perform the file swap on reboot. It will rename your original MUI file to a backup like "notepad.mui.bak", but since the modified MUI replacement file is missing, the system will end up with no valid MUI file at all. This will render your system resources inaccessible and cause critical stability or UI display issues.
 
-The only safe and recommended way to abort a pending operation is by clearing the registry entry in **`PendingFileRenameOperations`**, as described in the section above.
+The only safe and recommended way to abort a pending operation is by clearing the registry entries in **`PendingFileRenameOperations`**, as described in the section above.
 
 ### I am a developer and want to add support for other languages. Where should I start?
 Adding support for another system language is simple. You just need to follow the existing structure:
