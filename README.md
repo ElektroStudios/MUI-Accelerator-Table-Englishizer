@@ -126,7 +126,7 @@ Adding support for another system language is simple. You just need to follow th
 2. Add the required resource definitions for your target language's accelerator tables in the `AccTables.vb` file.
 3. Register your new language configuration in the main application logic within the `LangConfigs` array, so it can be detected during the file validation process.
 
-Since the architecture is modular, you only need to provide the correct checksums and accelerator data for your specific localization, and the tool will handle the rest.
+Since the architecture is modular, you only need to provide the correct checksums and accelerator data for your specific localization, and the application will handle the rest.
 
 ## ⚠️ Disclaimer:
 
