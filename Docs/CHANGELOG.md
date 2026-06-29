@@ -1,6 +1,12 @@
 # MATE (MUI Accelerator Table Englishizer) Change Log 📋
 
-## v1.0.1 *(current)* 🆕
+## v1.0.2 *(current)* 🆕
+#### 🌟 Improvements:
+ - Added one new variant for shell32.dll.mui in Windows 10.
+ - Added a CRC-32 calculator app in the Tools folder.
+ - Minor source-code changes.
+ 
+## v1.0.1 🔄
 #### 🌟 Improvements:
  - Implemented pseudo-support for "Englishizing" the modern Windows 11 Notepad.
  - Introduced an 'ENVIRONMENT SPECIFICATIONS' section within the application interface.

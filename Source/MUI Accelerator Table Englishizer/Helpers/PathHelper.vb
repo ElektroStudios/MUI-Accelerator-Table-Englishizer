@@ -237,13 +237,23 @@ Friend Module PathHelper
             Return targetPath
         End If
 
-        ' Already an extended path
-        If targetPath.StartsWith("\\?\") Then
+        ' Already an extended path.
+        If targetPath.StartsWith("\\?\", StringComparison.Ordinal) Then
             Return targetPath
         End If
 
-        ' Extended paths only support absolute paths, not relative
-        Return If(Not Path.IsPathRooted(targetPath), targetPath, $"\\?\{targetPath}")
+        ' Relative paths cannot be converted to Extended-Length paths.
+        If Not Path.IsPathRooted(targetPath) Then
+            Return targetPath
+        End If
+
+        ' Handle UNC paths: \\Server\Share -> \\?\UNC\Server\Share
+        If targetPath.StartsWith("\\", StringComparison.Ordinal) Then
+            Return $"\\?\UNC\{targetPath.Substring(2)}"
+        End If
+
+        ' Handle Local paths: C:\Folder -> \\?\C:\Folder
+        Return $"\\?\{targetPath}"
     End Function
 
     ''' <summary>
