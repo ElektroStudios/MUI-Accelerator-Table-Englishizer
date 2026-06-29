@@ -120,7 +120,9 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
-    <None Include="Tools\ResourceHacker.ini" />
+    <None Include="Tools\ResourceHacker.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Legal\EULA %28Sysinternals%29.txt">
