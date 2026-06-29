@@ -124,6 +124,51 @@ Friend Module RegistryHelper
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Checks if the volatile registry checkpoint exists, indicating that tasks were already completed.
+    ''' </summary>
+    ''' <returns>True if the checkpoint value exists; otherwise, False.</returns>
+    Friend Function CheckIfCheckPointExists() As Boolean
+        Dim exists As Boolean = False
+
+        Try
+            Using hkcu As RegistryKey =
+                Registry.CurrentUser.OpenSubKey(AppGlobals.RegVolatileSubKeyPath, writable:=False)
+
+                If hkcu IsNot Nothing Then
+                    Dim regValue As Object = hkcu.GetValue(AppGlobals.RegVolatileValueName, defaultValue:=Nothing)
+                    If regValue IsNot Nothing Then
+                        exists = True
+                    End If
+                End If
+            End Using
+
+        Catch ex As Exception
+            Debug.WriteLine($"Failed to read volatile registry key: {ex.Message}")
+
+        End Try
+
+        Return exists
+    End Function
+
+    ''' <summary>
+    ''' Creates a volatile registry key and value to mark the completion of the application tasks.
+    ''' This volatile key will automatically disappear upon the next system reboot.
+    ''' </summary>
+    Friend Sub CreateVolatileCheckPoint()
+        Try
+            Using hkcu As RegistryKey =
+                Registry.CurrentUser.CreateSubKey(AppGlobals.RegVolatileSubKeyPath, writable:=True, RegistryOptions.Volatile)
+
+                hkcu?.SetValue(AppGlobals.RegVolatileValueName, 1, RegistryValueKind.DWord)
+            End Using
+
+        Catch ex As Exception
+            ConsoleHelper.WriteColoredLine($" [WARN] Could not create volatile registry checkpoint: {ex.Message}", ConsoleColor.Yellow)
+
+        End Try
+    End Sub
+
 #End Region
 
 End Module

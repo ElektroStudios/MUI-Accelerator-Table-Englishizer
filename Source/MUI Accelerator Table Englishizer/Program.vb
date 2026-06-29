@@ -121,26 +121,37 @@ Public Module Program
         Console.WriteLine("╰──────────────────────────────────────────────────────────────────────────────────╯")
         Console.WriteLine()
 
+        ' ======================================================================
+        ' MUTEX CHECK (Verifies whether no other application instace is running)
+        ' ======================================================================
         If Not Program.createdNewMutex Then
-            ConsoleHelper.ExitWithMessage("Another instance of this application is already running.", 2, ConsoleColor.Red)
+            ConsoleHelper.ExitWithMessage("Another instance of this application is already running.", 1, ConsoleColor.Red)
         End If
+
+        ' ==============================================================================
+        ' VOLATILE REGISTRY CHECK (Verifies whether a system reboot is already required)
+        ' ==============================================================================
+        If RegistryHelper.CheckIfCheckPointExists() Then
+            ConsoleHelper.ExitWithMessage(" [X] ERROR: File replacements have already been scheduled and are pending a system reboot." & Environment.NewLine &
+                                          "            Please restart your computer before running this application again.", 2, ConsoleColor.Red)
+        End If
+        ' ==============================================================================
 
         ConsoleHelper.WriteColoredLine(" ENVIRONMENT SPECIFICATIONS", ConsoleColor.Magenta)
         ConsoleHelper.WriteColoredLine("================================================================================", ConsoleColor.DarkGray)
         Console.WriteLine()
-        ConsoleHelper.WriteColoredLine($" System Name          : {My.Computer.Info.OSFullName}", ConsoleColor.DarkYellow)
-        ConsoleHelper.WriteColoredLine($" System Version       : {My.Computer.Info.OSVersion}", ConsoleColor.DarkYellow)
-        ConsoleHelper.WriteColoredLine($" System Architecture  : {ArchitectureHelper.GetOsArchitectureDisplayName()}", ConsoleColor.DarkYellow)
-        ConsoleHelper.WriteColoredLine($" Process Architecture : {ArchitectureHelper.GetProcessArchitectureDisplayName()}", ConsoleColor.DarkYellow)
-        ' ConsoleHelper.WriteColoredLine($" Installed UI Culture : {My.Computer.Info.InstalledUICulture.DisplayName} ({My.Computer.Info.InstalledUICulture.Name})", ConsoleColor.DarkYellow)
+        ' App manifest is present: My.Computer.Info returns accurate, non-backwards-compatible OS details.
+        ConsoleHelper.WriteColoredLine($" OS Platform Name  : {My.Computer.Info.OSFullName} ({ArchitectureHelper.GetOsArchitectureDisplayName()})", ConsoleColor.DarkYellow)
+        ConsoleHelper.WriteColoredLine($" OS Build Version  : {My.Computer.Info.OSVersion}", ConsoleColor.DarkYellow)
         Dim userLanguageId As UShort = NativeMethods.GetUserDefaultUILanguage()
         Dim currentUiCulture As New CultureInfo(userLanguageId)
-        ConsoleHelper.WriteColoredLine($" Current UI Culture   : {currentUiCulture.DisplayName} ({currentUiCulture.Name})", ConsoleColor.DarkYellow)
+        ConsoleHelper.WriteColoredLine($" System UI Locale  : {currentUiCulture.DisplayName} ({currentUiCulture.Name})", ConsoleColor.DarkYellow)
+        ConsoleHelper.WriteColoredLine($" Process Execution : {ArchitectureHelper.GetProcessArchitectureDisplayName()}", ConsoleColor.DarkYellow)
         Console.WriteLine()
 
         Dim isWin10OrGreater As Boolean = UtilWindows.IsWin10OrGreater
         If Not isWin10OrGreater Then
-            ConsoleHelper.ExitWithMessage("This application requires Windows 10 or later.", 1, ConsoleColor.Red)
+            ConsoleHelper.ExitWithMessage("This application requires Windows 10 or later.", 3, ConsoleColor.Red)
         End If
 
         ConsoleHelper.WriteColoredLine("Press 'Y' key to begin the accelerator tables modification, or 'Escape' key to exit...", ConsoleColor.Yellow)
@@ -172,8 +183,9 @@ Public Module Program
                 ConsoleHelper.WriteColoredLine($" Temp path for pending files: {tempMuiDirectoryPath}", ConsoleColor.DarkYellow)
                 Console.WriteLine()
 
+                ' ============================================
                 ' Windows 11 Modern Notepad AppX Package check
-                ' --------------------------------------------
+                ' ============================================
                 Dim isWin11OrGreater As Boolean = UtilWindows.IsWin11OrGreater
                 If isWin11OrGreater Then
                     Dim ciTwoLetter As String = langConfig.Value.CultureInfo.TwoLetterISOLanguageName
@@ -198,7 +210,7 @@ Public Module Program
                         Console.WriteLine()
                     End If
                 End If
-                ' --------------------------------------------
+                ' ============================================
 
                 ConsoleHelper.WriteColoredLine(" MUI FILES RETRIEVAL", ConsoleColor.Magenta)
                 ConsoleHelper.WriteColoredLine("================================================================================", ConsoleColor.DarkGray)
@@ -238,7 +250,7 @@ Public Module Program
                     ConsoleHelper.WriteColoredLine(" Accepting Movefile EULA...", ConsoleColor.White)
                     Dim successAcceptMovefileEula As Boolean = RegistryHelper.AcceptMovefileEula()
                     If Not successAcceptMovefileEula Then
-                        ConsoleHelper.ExitWithMessage(Nothing, exitCode:=1, Console.ForegroundColor)
+                        ConsoleHelper.ExitWithMessage(Nothing, exitCode:=4, Console.ForegroundColor)
                     End If
                     ConsoleHelper.WriteColoredLine(" Completed accepting Movefile EULA.", ConsoleColor.Green)
                     Console.WriteLine()
@@ -485,6 +497,7 @@ Public Module Program
             ConsoleHelper.WriteColoredLine(" All pending file operations have been scheduled for the next system restart.", ConsoleColor.Yellow)
             ConsoleHelper.WriteColoredLine(" [!] Please reboot your system to apply the changes.", ConsoleColor.Yellow)
             Console.WriteLine()
+            RegistryHelper.CreateVolatileCheckPoint()
 
         Else
             RegistryHelper.PrintScheduledFileOperations()

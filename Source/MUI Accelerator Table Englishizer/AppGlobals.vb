@@ -72,6 +72,16 @@ Friend Module AppGlobals
     Friend ReadOnly RESOURCE_HACKER_LOGFILE_PATH As String =
         Path.Combine(Path.GetTempPath(), "ResourceHacker.log")
 
+    ''' <summary>
+    ''' The registry subkey path used to store volatile application state information.
+    ''' </summary>
+    Friend ReadOnly RegVolatileSubKeyPath As String = $"Software\{My.Application.Info.Title}"
+
+    ''' <summary>
+    ''' The registry value name used to indicate that the application tasks have been completed.
+    ''' </summary>
+    Friend Const RegVolatileValueName As String = "TasksCompleted"
+
 End Module
 
 #End Region

@@ -68,7 +68,7 @@ Friend Module ConsoleHelper
         End If
 
         If exitCode <> 0 Then
-            Console.WriteLine($"Exiting application with exit code: {exitCode} (0x{exitCode:X8}) ...")
+            Console.WriteLine($"Exiting application with exit code: {exitCode} (0x{exitCode:X8})...")
             Console.WriteLine()
         End If
 
