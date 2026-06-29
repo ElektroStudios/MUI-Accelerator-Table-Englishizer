@@ -4,7 +4,8 @@
 #### 🌟 Improvements:
  - Implemented an execution guard to block the program from running when a system reboot is pending.
  - Updated the optional CRC-32 Calculator app in the **Tools** folder.
- 
+ - Minor source-code changes affecting console output messages.
+
 ## v1.0.2 🔄
 #### 🌟 Improvements:
  - Registered a new variant of `shell32.dll.mui` for Windows 10.
