@@ -12,6 +12,8 @@ Option Infer Off
 Imports System.Runtime.InteropServices
 Imports System.Security
 
+Imports DevCase.Win32.Structures
+
 Imports Microsoft.VisualBasic
 
 #End Region
@@ -63,6 +65,32 @@ Namespace DevCase.Win32.NativeMethods
                                         <[In]> buffer As Byte(),
                                         <[In]> bufferLen As UInteger
         ) As UInteger
+        End Function
+
+        ''' <summary>
+        ''' Gets version information about the currently running operating system.
+        ''' <para></para>
+        ''' <see cref="NativeMethods.RtlGetVersion"/> is the equivalent of the GetVersionEx function in the Windows SDK.
+        ''' </summary>
+        '''
+        ''' <remarks>
+        ''' <see href="https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetversion"/>
+        ''' </remarks>
+        '''
+        ''' <param name="refOsVersionInfo">
+        ''' A RTL_OSVERSIONINFOW structure or a RTL_OSVERSIONINFOEXW structure that contains the 
+        ''' version information about the currently running operating system. 
+        ''' <para></para>
+        ''' A caller specifies which input structure is used by setting the 
+        ''' dwOSVersionInfoSize member of the structure to the size in bytes of the structure that is used.
+        ''' </param>
+        '''
+        ''' <returns>
+        ''' Returns STATUS_SUCCESS (zero).
+        ''' </returns>
+        <DllImport(Win32LibNames.NtDll, CharSet:=CharSet.Unicode)>
+        Public Function RtlGetVersion(ByRef refOsVersionInfo As OsVersionInfoEx
+        ) As Integer
         End Function
 
 #End Region

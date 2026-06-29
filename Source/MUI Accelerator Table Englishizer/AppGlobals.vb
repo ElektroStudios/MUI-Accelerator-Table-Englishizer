@@ -9,13 +9,16 @@ Option Infer Off
 
 #Region " Imports "
 
+Imports System.Globalization
 Imports System.IO
+Imports System.Threading
+
+
 
 #End Region
-
 #Region " AppGlobals "
 ''' <summary>
-''' Provides global application definitions.
+''' Provides global constant values for this application.
 ''' </summary>
 Friend Module AppGlobals
 
@@ -24,6 +27,24 @@ Friend Module AppGlobals
     ''' </summary>
     Friend ReadOnly BaseTempMuiDirectoryPath As String =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"{My.Application.Info.ProductName}")
+
+    ''' <summary>
+    ''' The file extension suffix used to create backup copies of original MUI 
+    ''' files scheduled to occur upon the next system reboot.
+    ''' </summary>
+    Friend Const MuiFileBackupSuffix As String = "bak"
+
+    ''' <summary>
+    ''' The file extension suffix used for pending file replacement operations 
+    ''' scheduled to occur upon the next system reboot.
+    ''' </summary>
+    Friend Const MuiFilePendingSuffix As String = "pending"
+
+    ''' <summary>
+    ''' The file extension suffix used to set distinguish files that failed 
+    ''' during the scheduled file replacement operation.
+    ''' </summary>
+    Friend Const MuiFileFailedSuffix As String = "failed"
 
     ''' <summary>
     ''' Full file path to the Sysinternals <b>MoveFile</b> executable (dynamically selected as either 
@@ -50,24 +71,6 @@ Friend Module AppGlobals
     ''' </summary>
     Friend ReadOnly RESOURCE_HACKER_LOGFILE_PATH As String =
         Path.Combine(Path.GetTempPath(), "ResourceHacker.log")
-
-    ''' <summary>
-    ''' The file extension suffix used to create backup copies of original MUI 
-    ''' files scheduled to occur upon the next system reboot.
-    ''' </summary>
-    Friend Const MuiFileBackupSuffix As String = "bak"
-
-    ''' <summary>
-    ''' The file extension suffix used for pending file replacement operations 
-    ''' scheduled to occur upon the next system reboot.
-    ''' </summary>
-    Friend Const MuiFilePendingSuffix As String = "pending"
-
-    ''' <summary>
-    ''' The file extension suffix used to set distinguish files that failed 
-    ''' during the scheduled file replacement operation.
-    ''' </summary>
-    Friend Const MuiFileFailedSuffix As String = "failed"
 
 End Module
 

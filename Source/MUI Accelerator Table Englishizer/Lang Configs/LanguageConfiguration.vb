@@ -12,15 +12,15 @@ Option Infer Off
 Imports System.Collections.Generic
 Imports System.Diagnostics
 Imports System.Globalization
+Imports System.Linq
 
 #End Region
 
 #Region " LanguageConfiguration "
-
 ''' <summary>
 ''' Provides a base implementation for culture-specific MUI language configurations. This class must be inherited.
 ''' </summary>
-Public MustInherit Class LanguageConfiguration
+Public MustInherit Class LanguageConfiguration : Implements IEquatable(Of LanguageConfiguration)
 
 #Region " Properties "
 
@@ -53,7 +53,7 @@ Public MustInherit Class LanguageConfiguration
     ''' </param>
     ''' 
     ''' <param name="muiDescriptors">
-    ''' The read-only collection of targeted MUI file metadata definitions.
+    ''' The read-only collection of targeted MUI file descriptor definitions.
     ''' </param>
     ''' 
     ''' <exception cref="ArgumentNullException">
@@ -76,12 +76,48 @@ Public MustInherit Class LanguageConfiguration
         End If
 
         If muiDescriptors.Count = 0 Then
-            Throw New ArgumentException("The MUI file metadata collection cannot be empty.", NameOf(muiDescriptors))
+            Throw New ArgumentException("The MuiDescriptors collection cannot be empty.", NameOf(muiDescriptors))
         End If
 
         Me.CultureInfo = ci
         Me.MuiDescriptors = muiDescriptors
     End Sub
+
+    ''' <summary>
+    ''' Determines whether the specified <see cref="LanguageConfiguration"/> is equal to the current instance.
+    ''' </summary>
+    ''' 
+    ''' <param name="other">
+    ''' The <see cref="LanguageConfiguration"/> to compare with the current object.
+    ''' </param>
+    ''' 
+    ''' <returns>
+    ''' <see langword="True"/> if the objects are equal; otherwise, <see langword="False"/>.
+    ''' </returns>
+    Public Overloads Function Equals(other As LanguageConfiguration) As Boolean Implements IEquatable(Of LanguageConfiguration).Equals
+
+        Return (other IsNot Nothing) AndAlso
+               Me.CultureInfo.Equals(other.CultureInfo) AndAlso
+               Me.MuiDescriptors.SequenceEqual(other.MuiDescriptors)
+    End Function
+
+    ''' <summary>
+    ''' Determines whether the specified <see cref="Object"/> is equal to the current instance.
+    ''' </summary>
+    ''' 
+    ''' <param name="obj">
+    ''' The object to compare with the current instance.
+    ''' </param>
+    ''' 
+    ''' <returns>
+    ''' <see langword="True"/> if the specified object is equal to the current instance; otherwise, <see langword="False"/>.
+    ''' </returns>
+    Public Overrides Function Equals(obj As Object) As Boolean
+
+        Dim other As LanguageConfiguration = TryCast(obj, LanguageConfiguration)
+
+        Return Me.Equals(other)
+    End Function
 
 #End Region
 

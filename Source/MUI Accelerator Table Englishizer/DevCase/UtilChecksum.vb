@@ -23,7 +23,7 @@ Imports DevCase.Win32
 Namespace DevCase.Core.Security.DataIntegrity.Checksum
 
     ''' <summary>
-    ''' Contains checksum related utilities.
+    ''' Provides checksum related utilities.
     ''' </summary>
     Public NotInheritable Class UtilChecksum
 

@@ -64,14 +64,24 @@
     <Import Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accelerator Configs\AccTables.vb" />
+    <Compile Include="DevCase\NativeMethods_Kernel32.vb" />
+    <Compile Include="Helpers\AppxPackagesHelper.vb" />
+    <Compile Include="Lang Configs\AccTables.vb" />
     <Compile Include="AppGlobals.vb" />
+    <Compile Include="DevCase\OsVersionInfoEx.vb" />
     <Compile Include="DevCase\UtilChecksum.vb" />
     <Compile Include="DevCase\NativeMethods_NtDll.vb" />
+    <Compile Include="DevCase\UtilWindows.vb" />
     <Compile Include="DevCase\Win32LibNames.vb" />
-    <Compile Include="Accelerator Configs\LanguageConfiguration.vb" />
-    <Compile Include="Accelerator Configs\LanguageConfiguration_esES.vb" />
-    <Compile Include="Accelerator Configs\MuiDescriptor.vb" />
+    <Compile Include="Lang Configs\LanguageConfiguration.vb" />
+    <Compile Include="Lang Configs\LanguageConfiguration_esES.vb" />
+    <Compile Include="Lang Configs\MuiDescriptor.vb" />
+    <Compile Include="Helpers\ConsoleHelpers.vb" />
+    <Compile Include="Helpers\ArchitectureHelpers.vb" />
+    <Compile Include="Helpers\PathHelper.vb" />
+    <Compile Include="Helpers\RegistryHelpers.vb" />
+    <Compile Include="Helpers\ToolsExecutors.vb" />
+    <Compile Include="Helpers\UserPermissionsHelper.vb" />
     <Compile Include="Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

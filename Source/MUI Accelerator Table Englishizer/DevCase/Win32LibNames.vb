@@ -20,16 +20,21 @@ Imports System.Runtime.InteropServices
 Namespace DevCase.Win32
 
     ''' <summary>
-    ''' Contains the filenames to specify in <see cref="DllImportAttribute.Value"/> for all used Win32 API libraries.
+    ''' Provides the filenames to specify in <see cref="DllImportAttribute.Value"/> for all referenced Win32 functions.
     ''' </summary>
     Friend Module Win32LibNames
 
         ' ReSharper disable InconsistentNaming
 
         ''' <summary>
+        ''' Kernel32.dll
+        ''' </summary>
+        Friend Const Kernel32 As String = "kernel32.dll"
+
+        ''' <summary>
         ''' NtDll.dll
         ''' </summary>
-        Friend Const NtDll As String = "NtDll.dll"
+        Friend Const NtDll As String = "ntdll.dll"
 
     End Module
 
