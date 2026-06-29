@@ -2,7 +2,7 @@
 
 ## v1.0.2 *(current)* 🆕
 #### 🌟 Improvements:
- - Added one new variant for shell32.dll.mui in Windows 10.
+ - Registered a new variant of `shell32.dll.mui` for Windows 10.
  - Added a CRC-32 calculator app in the Tools folder.
  - Minor source-code changes.
  
