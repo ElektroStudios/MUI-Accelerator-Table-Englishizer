@@ -1,4 +1,4 @@
-Resource Hacker™
+﻿Resource Hacker™
 Copyright © 1998-2025 Angus Johnson
 Freeware - no nags, no ads and fully functional.
 

@@ -1,4 +1,4 @@
-# MATE (MUI Accelerator Table Englishizer) Change Log 📋
+﻿# MATE (MUI Accelerator Table Englishizer) Change Log 📋
 
 ## v1.0.3 *(current)* 🆕
 #### 🌟 Improvements:
