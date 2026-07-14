@@ -211,6 +211,4 @@ Furthermore, this project operates entirely independently. The utilization of an
 
 **Use this software at your own risk.** This application modifies system-level MUI files to change keyboard accelerator tables. While the process is designed with safety mechanisms, modifying system files always may carry issues with System File Protection (SFC), DISM, or Windows Update functionalities. 
 
-By using this software, you agree to indemnify and hold harmless the authors from any claims, damages, or liabilities arising from your use or misuse of it.
-
 This project is licensed under the **Apache License, Version 2.0**. See the  [License](./LICENSE) file for details.
