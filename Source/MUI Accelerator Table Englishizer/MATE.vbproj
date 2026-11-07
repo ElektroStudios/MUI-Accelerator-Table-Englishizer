@@ -120,6 +120,9 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+    <None Include="Tools\CRC-32 Calculator.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Tools\ResourceHacker.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
