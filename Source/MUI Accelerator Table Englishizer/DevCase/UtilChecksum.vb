@@ -62,6 +62,10 @@ Namespace DevCase.Core.Security.DataIntegrity.Checksum
         <DebuggerStepThrough>
         Public Shared Function ComputeCRC32OfFile(filepath As String) As String
 
+            If String.IsNullOrWhiteSpace(filepath) Then
+                Throw New ArgumentNullException(NameOf(filepath))
+            End If
+
             Dim data As Byte() = File.ReadAllBytes(filepath)
             Return UtilChecksum.ComputeCRC32OfBytes(data)
         End Function
@@ -86,6 +90,10 @@ Namespace DevCase.Core.Security.DataIntegrity.Checksum
         ''' </returns>
         <DebuggerStepThrough>
         Public Shared Function ComputeCRC32OfBytes(bytes As Byte()) As String
+
+            If bytes Is Nothing Then
+                Throw New ArgumentNullException(NameOf(bytes))
+            End If
 
             Const initialValue As UInteger = 0UI
             Dim bufferSize As UInteger = Convert.ToUInt32(bytes.Length)

@@ -136,6 +136,9 @@ Namespace DevCase.Core.Windows.Common
             If status = 0 Then
                 refPlatformID = refOsVersionInfoEx.PlatformId
                 refVersion = New Version(refOsVersionInfoEx.MajorVersion, refOsVersionInfoEx.MinorVersion, refOsVersionInfoEx.BuildNumber)
+                ' The native call succeeded; do not let the .NET fallback (which is subject to
+                ' application compatibility shims) overwrite the accurate native values.
+                Return
             End If
 
             ' .NET Fallback.

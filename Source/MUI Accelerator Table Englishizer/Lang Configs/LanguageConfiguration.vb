@@ -10,6 +10,7 @@ Option Infer Off
 #Region " Imports "
 
 Imports System.Collections.Generic
+Imports System.Collections.ObjectModel
 Imports System.Diagnostics
 Imports System.Globalization
 Imports System.Linq
@@ -61,7 +62,7 @@ Public MustInherit Class LanguageConfiguration : Implements IEquatable(Of Langua
     ''' </exception>
     ''' 
     ''' <exception cref="ArgumentException">
-    ''' Thrown when <paramref name="muiDescriptors"/> contains no elements.
+    ''' Thrown when <paramref name="muiDescriptors"/> contains no elements, or contains null elements.
     ''' </exception>
     <DebuggerStepThrough>
     Public Sub New(ci As CultureInfo,
@@ -79,8 +80,15 @@ Public MustInherit Class LanguageConfiguration : Implements IEquatable(Of Langua
             Throw New ArgumentException("The MuiDescriptors collection cannot be empty.", NameOf(muiDescriptors))
         End If
 
+        For i As Integer = 0 To muiDescriptors.Count - 1
+            If muiDescriptors(i) Is Nothing Then
+                Throw New ArgumentException($"The MuiDescriptors collection cannot contain null elements (index {i}).", NameOf(muiDescriptors))
+            End If
+        Next i
+
         Me.CultureInfo = ci
-        Me.MuiDescriptors = muiDescriptors
+        ' Defensive copy: later changes to the source collection must not alter this configuration.
+        Me.MuiDescriptors = New ReadOnlyCollection(Of MuiDescriptor)(muiDescriptors.ToList())
     End Sub
 
     ''' <summary>
@@ -117,6 +125,26 @@ Public MustInherit Class LanguageConfiguration : Implements IEquatable(Of Langua
         Dim other As LanguageConfiguration = TryCast(obj, LanguageConfiguration)
 
         Return Me.Equals(other)
+    End Function
+
+    ''' <summary>
+    ''' Serves as the default hash function.
+    ''' <para></para>
+    ''' The hash code is consistent with <see cref="LanguageConfiguration.Equals(LanguageConfiguration)"/>,
+    ''' which compares the culture and the sequence of MUI descriptors.
+    ''' </summary>
+    '''
+    ''' <returns>
+    ''' A hash code for the current object.
+    ''' </returns>
+    Public Overrides Function GetHashCode() As Integer
+
+        ' Note: Bit shifts are used instead of multiplications because VB.NET performs integer overflow checks.
+        Dim hash As Integer = Me.CultureInfo.GetHashCode()
+        For Each muiDesc As MuiDescriptor In Me.MuiDescriptors
+            hash = (hash << 5) Xor (hash >> 27) Xor muiDesc.GetHashCode()
+        Next muiDesc
+        Return hash
     End Function
 
 #End Region

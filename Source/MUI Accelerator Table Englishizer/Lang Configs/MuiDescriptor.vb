@@ -68,13 +68,14 @@ Public NotInheritable Class MuiDescriptor : Implements IEquatable(Of MuiDescript
         If String.IsNullOrWhiteSpace(muiFileName) Then
             Throw New ArgumentNullException(NameOf(muiFileName))
         End If
-        Try
-            Dim validFileName As String = IO.Path.GetFileNameWithoutExtension(muiFileName)
-        Catch ex As ArgumentException
-            Throw New ArgumentException("The provided MUI file name cannot be parsed as a valid Windows file name.", NameOf(muiFileName), ex)
-        End Try
-        If Not IO.Path.HasExtension(muiFileName) OrElse
-           Not IO.Path.GetExtension(muiFileName).Equals(".mui", StringComparison.OrdinalIgnoreCase) Then
+        ' Validations are performed on the trimmed value, which is the value that is finally stored.
+        Dim trimmedFileName As String = muiFileName.Trim()
+        If trimmedFileName.IndexOfAny(IO.Path.GetInvalidFileNameChars()) >= 0 Then
+            Throw New ArgumentException("The provided MUI file name cannot be parsed as a valid Windows file name.", NameOf(muiFileName))
+        End If
+        If Not IO.Path.HasExtension(trimmedFileName) OrElse
+           Not IO.Path.GetExtension(trimmedFileName).Equals(".mui", StringComparison.OrdinalIgnoreCase) OrElse
+           String.IsNullOrWhiteSpace(IO.Path.GetFileNameWithoutExtension(trimmedFileName)) Then
             Throw New ArgumentException("The provided MUI file must have a '.mui' extension.", NameOf(muiFileName))
         End If
 
@@ -82,8 +83,13 @@ Public NotInheritable Class MuiDescriptor : Implements IEquatable(Of MuiDescript
         If String.IsNullOrWhiteSpace(checksum) Then
             Throw New ArgumentNullException(NameOf(checksum))
         End If
-        If checksum.Length <> 8 Then
+        ' Validations are performed on the trimmed value, which is the value that is finally stored.
+        Dim trimmedChecksum As String = checksum.Trim()
+        If trimmedChecksum.Length <> 8 Then
             Throw New ArgumentException("The CRC-32 checksum must be exactly 8 characters in length.", NameOf(checksum))
+        End If
+        If Not MuiDescriptor.IsHexString(trimmedChecksum) Then
+            Throw New ArgumentException("The CRC-32 checksum must contain only hexadecimal characters (0-9, A-F).", NameOf(checksum))
         End If
 
         ' accTable validations
@@ -100,10 +106,44 @@ Public NotInheritable Class MuiDescriptor : Implements IEquatable(Of MuiDescript
             Throw New ArgumentException("The accelerator table is missing required 'ACCELERATORS', 'LANGUAGE', '{', or '}' tokens.", NameOf(accTable))
         End If
 
-        Me.FileName = muiFileName.Trim()
-        Me.Checksum = checksum.Trim()
+        Me.FileName = trimmedFileName
+        Me.Checksum = trimmedChecksum
         Me.AcceleratorTable = accTable.Trim()
     End Sub
+
+#End Region
+
+#Region " Private Methods "
+
+    ''' <summary>
+    ''' Determines whether the specified string is composed only of hexadecimal characters (0-9, a-f, A-F).
+    ''' </summary>
+    '''
+    ''' <param name="value">
+    ''' The string to evaluate.
+    ''' </param>
+    '''
+    ''' <returns>
+    ''' <see langword="True"/> if <paramref name="value"/> contains only hexadecimal characters; otherwise, <see langword="False"/>.
+    ''' </returns>
+    <DebuggerStepThrough>
+    Private Shared Function IsHexString(value As String) As Boolean
+
+        For Each c As Char In value
+            Dim isHexChar As Boolean = (c >= "0"c AndAlso c <= "9"c) OrElse
+                                       (c >= "a"c AndAlso c <= "f"c) OrElse
+                                       (c >= "A"c AndAlso c <= "F"c)
+            If Not isHexChar Then
+                Return False
+            End If
+        Next c
+
+        Return True
+    End Function
+
+#End Region
+
+#Region " Equality Members "
 
     ''' <summary>
     ''' Determines whether the specified <see cref="MuiDescriptor"/> is equal to the current instance.
@@ -140,6 +180,25 @@ Public NotInheritable Class MuiDescriptor : Implements IEquatable(Of MuiDescript
         Dim other As MuiDescriptor = TryCast(obj, MuiDescriptor)
 
         Return Me.Equals(other)
+    End Function
+
+    ''' <summary>
+    ''' Serves as the default hash function.
+    ''' <para></para>
+    ''' The hash code is consistent with <see cref="MuiDescriptor.Equals(MuiDescriptor)"/>,
+    ''' which compares all the properties using a case-insensitive ordinal comparison.
+    ''' </summary>
+    '''
+    ''' <returns>
+    ''' A hash code for the current object.
+    ''' </returns>
+    Public Overrides Function GetHashCode() As Integer
+
+        ' Note: Bit shifts are used instead of multiplications because VB.NET performs integer overflow checks.
+        Dim comparer As StringComparer = StringComparer.OrdinalIgnoreCase
+        Return comparer.GetHashCode(Me.FileName) Xor
+               (comparer.GetHashCode(Me.Checksum) << 7) Xor
+               (comparer.GetHashCode(Me.AcceleratorTable) << 13)
     End Function
 
 #End Region

@@ -154,7 +154,7 @@ Friend Module PathHelper
 
 #End Region
 
-#Region " Private Methods "
+#Region " Internal Helper Methods "
 
     ''' <summary>
     ''' Recursively searches a directory tree for files matching a specific file name or search pattern.
@@ -172,7 +172,7 @@ Friend Module PathHelper
     ''' When this method returns, contains the discovered file paths that matches the <paramref name="searchPattern"/>.
     ''' </param>
     <DebuggerStepThrough>
-    Private Sub FindFiles(rootPath As String, searchPattern As String,
+    Friend Sub FindFiles(rootPath As String, searchPattern As String,
                     ByRef refMatches As HashSet(Of String))
 
         If refMatches Is Nothing Then
@@ -268,7 +268,11 @@ Friend Module PathHelper
     ''' A <see cref="SortedSet(Of String)"/> containing the paths of all successfully resolved directories.
     ''' </returns>
     <DebuggerStepThrough>
-    Private Function BuildSearchPathPatterns(langConfig As LanguageConfiguration) As SortedSet(Of String)
+    Friend Function BuildSearchPathPatterns(langConfig As LanguageConfiguration) As SortedSet(Of String)
+
+        If langConfig Is Nothing Then
+            Throw New ArgumentNullException(NameOf(langConfig))
+        End If
 
         Dim ciName As String = langConfig.CultureInfo.Name
 

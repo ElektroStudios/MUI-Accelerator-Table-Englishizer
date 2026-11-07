@@ -33,7 +33,7 @@ Namespace DevCase.Win32.Structures
     ''' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms724833%28v=vs.85%29.aspx"/>
     ''' </remarks>
     <DebuggerStepThrough>
-    <StructLayout(LayoutKind.Sequential)>
+    <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Unicode)>
     Public Structure OsVersionInfoEx
 
 #Region " Fields "
